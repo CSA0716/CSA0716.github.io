@@ -1,0 +1,530 @@
+
+
+<!DOCTYPE html>
+<html lang="en" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>OYSTER：基于LiDAR点云的无监督目标检测方向 - 大宋崔氏录</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  
+  <meta name="description" content="Title：Towards Unsupervised ...">
+  <meta name="author" content="大宋崔氏">
+  <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="https://at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: true,
+        alipay: 'https://pic.izhaoo.com/alipay.jpg',
+        wechat: 'https://pic.izhaoo.com/wechat.jpg'
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: true
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: true,
+        type: 'url',
+        image: 'https://pic.izhaoo.com/weapp-code.jpg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: false,
+        path: ''
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+    </div>
+    <div class="center">OYSTER：基于LiDAR点云的无监督目标检测方向</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="/ " class="underline "> 首页</a>
+      </li><li class="menu-item">
+        <a href="/galleries/ " class="underline "> 目标检测</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags/ " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories/ " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="/images/theme/p-image.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">OYSTER：基于LiDAR点云的无监督目标检测方向</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>December 06, 2023</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>13706</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+        <h2 id="Title：Towards-Unsupervised-Object-Detection-from-LiDAR-Point-Clouds"><a href="#Title：Towards-Unsupervised-Object-Detection-from-LiDAR-Point-Clouds" class="headerlink" title="Title：Towards Unsupervised Object Detection from LiDAR Point Clouds"></a>Title：Towards Unsupervised Object Detection from LiDAR Point Clouds</h2><p>C:\Users\20620\Documents\论文\目标检测\3D\利用点云[TowardsUnsupervisedObjectDetectionfromLiDARPointClouds.pdf]</p>
+<h2 id="1-Summary"><a href="#1-Summary" class="headerlink" title="1 Summary"></a>1 Summary</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">写完笔记之后最后填，概述文章的内容，以后查阅笔记的时候先看这一段。注：写文章<span class="hljs-selector-tag">summary</span>切记需要通过自己的思考，用自己的语言描述。忌讳直接Ctrl + c原文。<br></code></pre></td></tr></table></figure>
+
+<p>​	OYSTER，用于从LiDAR点云中进行无监督目标检测。通过使用弱目标先验（近距离点聚类）作为引导步骤，可以训练一个不需要人工注释的目标检测器，首先利用CNN的平移等变性生成远距离的伪标签，然后从目标轨迹的时间一致性中导出自我监督信号。文章提出的自我训练循环对于教授无监督检测器自我改进非常有效。</p>
+<h2 id="2-Research-Objective-s"><a href="#2-Research-Objective-s" class="headerlink" title="2 Research Objective(s)"></a>2 Research Objective(s)</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">作者的研究目标是什么？<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mathematica">实现在自动驾驶场景中从<span class="hljs-number">3</span><span class="hljs-built_in">D</span>点云中进行无监督目标检测的目标<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-Problem-Statement"><a href="#3-Problem-Statement" class="headerlink" title="3 Problem Statement"></a>3 Problem Statement</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">问题陈述：作者需要解决的问题是什么<br></code></pre></td></tr></table></figure>
+
+<p>笼统点说，&#x3D;&#x3D;<u>在自动驾驶场景中从3D点云中进行无监督目标检测的问题</u>&#x3D;&#x3D;；<br>具体点说，当有大量的注释可用时，监督学习借助神经网络的强大性能可以显著解决3D目标检测任务，然而，由于大多数现有数据未标记，人工注释目前是数据驱动学习算法的瓶颈，因为它们需要繁琐的手动工作，在实践中非常昂贵。是否能设计无监督学习算法，让它们自行从原始传感器数据流中发现物体。</p>
+<p><img   class="lazyload" data-original="C:\Users\20620\Pictures\snipaste\Snipaste_2023-11-Tuesday_10-07-58.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>​	在近距离处，点云非常密集，我们可以清晰地区分簇[^①]，这促使我们使用先验知识。而在远距离处，点云相对稀疏，物体不太明显，这引导我们探索零样本泛化。</p>
+<h2 id="4-Method-s"><a href="#4-Method-s" class="headerlink" title="4 Method(s)"></a>4 Method(s)</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">作者解决问题的方法/算法是什么？是否基于前人的方法？基于了哪些？<br></code></pre></td></tr></table></figure>
+
+<p>​	我们的方法OYSTER（Object Discovery via Spatio-Temporal Refinement）巧妙地结合了密度空间聚类、时间一致性、等变性和自监督学习的关键思想，统一了这些思想的框架，充分发挥它们的优势，同时克服了它们的缺点。首先，我们利用点聚类在近距离处获得初始伪标签，以引导目标检测器的启动，其中点密度较高（见图1）。然后，我们采用无监督跟踪来过滤掉在时间上不一致的对象。由于点聚类在长距离处观测稀疏时效果不佳，我们利用CNN的平移等变性来训练高质量的近距离伪标签，并将其零样本泛化到长距离。为了弥合训练和推理中的短距离与长距离之间的密度差异，我们提出了一种新颖的随机LiDAR射线丢失策略。最后，我们设计了一个自我改进循环，其中这个引导模型可以进行自我训练。在每一轮自我改进中，我们利用目标的时间一致性自动调整模型在上一轮迭代中的检测结果，并将这些调整过的输出用作训练的伪标签。我们在Pandaset [68] 和Argoverse V2 Sensor [65] 上的实验证明，OYSTER在标准的基于交并比（IoU）的度量和我们提出的基于碰撞距离（DTC）的度量下，明显优于其他无监督方法。我们希望我们的工作可以成为构建自动随着更多数据而改进且不受人类监督限制的感知系统的一步。</p>
+<p>​	OYSTER有两个训练阶段：初始引导阶段和自我改进阶段。</p>
+<p><img   class="lazyload" data-original="C:\Users\20620\Pictures\snipaste\Snipaste_2023-11-Tuesday_17-32-24.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>注：图2. OYSTER概述，我们的无监督检测方法。在初始引导阶段（步骤1-6）中，我们训练一个CNN来处理近距离点云聚类结果，并依赖于CNN的平移等变性产生全范围的伪标签。我们的训练应用了<strong>随机射线丢失</strong>[^④]作为数据增强，并在伪标签上使用基于时间一致性的过滤。在自我改进阶段（步骤7）中，我们提出了一个名为Track、Refine、Retrain、Repeat的框架，教导一个无监督检测器进行迭代的自我改进。</p>
+<h4 id="4-1-einitial-bootstrapping"><a href="#4-1-einitial-bootstrapping" class="headerlink" title="4.1 einitial bootstrapping"></a>4.1 einitial bootstrapping</h4><p>​	初始引导阶段利用了点云在近距离处密集且具有清晰的对象簇的事实，因此我们可以通过点聚类[^③]获得合理的近距离边界框种子伪标签。由于卷积网络的平移等变性属性[^②]，我们发现在近距离标签上训练的卷积神经网络检测器可以在零样本的情况下通过数据增强（例如射线丢失，随机稀疏化输入）的帮助下泛化到更长的距离。</p>
+<p>​	对于给定的三维 LiDAR 点云 $p∈\mathbb{R}^{N×3}$，我们通过以下步骤获取初始种子伪标签 $B^{(0)}$：</p>
+<p>​			$B^{(0)}$←FitBboxes(Clustering(RemoveGround($p$)))</p>
+<p>注：	</p>
+<p>​	先<strong>地面去除（Ground Removal）</strong>、再<strong>点聚类（Point Clustering）</strong>、最后<strong>边界框拟合（Bounding Box Fitting）</strong></p>
+<p>​	我们采用二维鸟瞰（Bird-Eye-View，BEV）检测表示法[^38],[^70]，每个BEV边界框 $b&#x3D;(x,y,l,w,\theta)∈B^{(0)}$ 包括质心位置 $(x,y)$、长度和宽度 $(l,w) $以及方向 <em>θ</em>。我们对数据集 <em>D</em> 中的每一帧执行此操作，以获取完整的伪标签集合 $B^{(0)}$。</p>
+<ol>
+<li>​	对于地面去除，我们使用类似于[^71]的线性地面平面拟合，然后在聚类之前移除估计的地面点；</li>
+<li>​        对于聚类，我们使用 DBSCAN[17]；</li>
+<li>​	对于每个点簇的边界框拟合，我们使用现成的算法[74]。</li>
+</ol>
+<p>​	虽然存在更复杂的选择，但这些噪音初始标签已经足够好以启动我们的学习过程。</p>
+<p>​	在近距离范围（通常在具有64束的LiDAR的40米内），物体通常具有清晰的点簇（见图1），因此聚类标签足以用于引导初始训练。然而，在远距离范围内，每个物体的点较少，使得聚类结果不可靠，因此我们应该依赖神经网络在初始标签生成阶段的泛化能力。因此，我们的目标是仅在近距离范围内训练检测器，以便它可以在测试时零样本泛化到更远的范围。我们利用卷积网络的等变性来实现这一目标。按照[^38],[^70]的方法，我们仅在近距离训练单阶段CNN检测器，其中CNN的输入是体素化的点云。</p>
+<p>​	</p>
+<h5 id="4-1-1-数据增强–随机射线丢失"><a href="#4-1-1-数据增强–随机射线丢失" class="headerlink" title="4.1.1 数据增强–随机射线丢失"></a>4.1.1 数据增强–随机射线丢失</h5><p>​	考虑到近距离和远距离之间点密度的差异，我们还提出<strong>在训练过程中随机丢弃光束</strong>，<strong>使得卷积核在稀疏区域表现更好</strong>。这对于零样本泛化到远距离是有益的，<u><strong>射线丢弃的数据增强通过首先随机丢弃LiDAR光束，然后在球坐标系下的范围视图图像中均匀间隔的行和列中随机丢弃点来实现</strong></u>。这个过程旨在模拟LiDAR光束在距离增加时更加稀疏的方式。我们发现，当仅在近距离范围进行训练时，射线丢弃有助于CNN在零样本泛化到更远距离时取得显著更好的结果，其表现优于直接在完整范围的聚类标签上训练的CNN。<br>$$<br>\mathrm{CNN^{(0)} \leftarrow Train\bigg( \bigg{ RayDrop(p_i)\bigg}_{i\epsilon \mathcal{D}} ,\mathcal{B}^{(0)}  \lvert ;near-range \bigg)}<br>$$</p>
+<p>$$<br>\mathcal{B}^{(1)} \leftarrow \bigg{ \mathrm{NMS\bigg( CNN^{(0)}(Voxelize(p_i))\lvert ;full-range \bigg)\bigg}_{i\epsilon \mathcal{D}}}<br>$$</p>
+<h4 id="4-2-self-improvement"><a href="#4-2-self-improvement" class="headerlink" title="4.2 self-improvement"></a>4.2 self-improvement</h4><p>​	自我改进阶段利用<strong>对象轨迹的时间一致性</strong>作为自监督信号。鉴于时间上的嘈杂检测，我们采用无监督的离线跟踪器找到不同长度的对象轨迹。<u>我们舍弃短轨迹，并细化长轨迹。</u>一个对象轨迹应该在时间上有相同的物体大小，因此我们的细化过程利用轨迹级别的信息来更新长轨迹中的伪标签。</p>
+<p>​	我们在更新的伪标签上训练一个新的检测器，将其输出作为新的伪标签，<strong>迭代进行跟踪、细化，并重复</strong>。图2描述了整体流程。我们在下面更详细地描述了这两个训练阶段。</p>
+<p>​	尽管比初始标签 $B^{(0)} $好，但经过初始训练和范围扩展后的标签 $B^{(1)} $ 远非完美，需要进一步的细化。我们提出了一个名为“<em><strong>Track, Refine, Retrain, and Repeat</strong></em>”的框架，教导无监督检测器自我改进。我们的框架包括以下步骤：&#x3D;&#x3D;运行无监督跟踪，优化长轨迹，丢弃短轨迹，使用优化的伪标签重新训练检测器，然后使用阈值处理后的检测器输出重复该过程作为下一轮的伪标签。&#x3D;&#x3D;</p>
+<h4 id="4-3-Unsupervised-Tracking-无监督跟踪"><a href="#4-3-Unsupervised-Tracking-无监督跟踪" class="headerlink" title="4.3 Unsupervised Tracking:无监督跟踪"></a>4.3 Unsupervised Tracking:无监督跟踪</h4><p>​	我们遵循检测跟踪的范例，其中在时间序列的每一帧中首先独立获取物体检测结果，然后通过迭代地在两个连续的时间步之间进行离散关联以形成轨迹。为此，我们采用一个简单的参数化在线跟踪器。在时间序列的每个时间步中，每个物体 $j$ 都有一个轨迹片段 $S_{j}^{t}$，存储了估计的状态轨迹$S_{t}&#x3D;\big&lt;!–swig￼15–&gt;\big}$，其中 $b$ 对应先前介绍的框参数，($v_{x},v_{y}$) 是2D速度，$n_{t}$ 是到目前为止的轨迹长度，<em>c</em> 是轨迹的置信度分数。给定来自自我训练迭代 $k$ 的伪标签 $B^{(k)}$，我们首先预测每个轨迹片段的新状态，然后将检测结果与预测进行匹配。我们采用最简单的预测和匹配策略：预测假定帧之间的速度恒定，匹配基于边界框质心距离的贪婪算法。<br>$$<br>M_{t} \leftarrow Match \big(B^{(\mathrm{k})}<em>{t},Forecast(S</em>{t-1}))<br>$$</p>
+<h4 id="4-4-Pseudo-Label-Refinement-伪标签细化"><a href="#4-4-Pseudo-Label-Refinement-伪标签细化" class="headerlink" title="4.4 Pseudo-Label Refinement:伪标签细化"></a>4.4 Pseudo-Label Refinement:伪标签细化</h4><p>​	基于时间一致性分数 $\tilde{m}(\mathcal{k})<em>{t}$，我们通过阈值 $q$将伪标签划分为短轨迹片段和长轨迹片段。对于具有 $\tilde{m}^{(\mathrm{k})}</em>{t}$&lt;<em>q</em> 的短轨迹片段，在下一轮重新训练中我们将忽略它们。对于具有$\tilde{m}^{(\mathrm{k})}_{t}$≥<em>q</em> 的长轨迹片段，我们采用一个简单的过程对其进行细化。由于种子聚类标签具有最紧密包围框拟合的特性，$B^{(k)}$中的包围框大小对于部分观测到的对象来说较小，特别是对于那些离自车较远的对象。</p>
+<p>​	为了解决这个问题，对于每个角色轨迹，我们将该角色的新长度和宽度设置为在整个轨迹中检测到的所有长度和宽度的前 r 百分位数。接下来，按照[69]中的基于角点的对齐策略，我们找到距离自车最近的包围框角点，这是最观察到的角点，可能是最可靠的。然后，我们使用锚定的角点、原始包围框方向和新的包围框大小更新包围框中心。图3说明了细化过程。</p>
+<p><img   class="lazyload" data-original="C:\Users\20620\Pictures\snipaste\Snipaste_2023-11-Wednesday_10-49-53.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>[^注：]: 图3. 标签细化示例。通过无监督追踪，我们填补漏检，并获得每个对象的轨迹片段。对于长轨迹片段，我们利用时间观测来找到一个新的、一致的对象大小，并使用基于角点的对齐策略[69]更新初始标签（紫色）。我们还过滤掉短轨迹片段标签，它们将不会在下一轮的自我训练中使用。</p>
+<h4 id="4-5-Iterative-Self-Training-迭代自我训练"><a href="#4-5-Iterative-Self-Training-迭代自我训练" class="headerlink" title="4.5 Iterative Self-Training:迭代自我训练"></a>4.5 Iterative Self-Training:迭代自我训练</h4><p>​	在细化过程之后，我们得到了经过细化的伪标签 $\tilde{B}^{(\mathcal{k})}<em>{t}$并使用它们来指导下一轮的训练：其中 ∅ 表示在检测器重新训练期间不在这个伪对象的位置应用训练损失，即，<u><strong>我们只在伪标签在时间上一致且经过细化的位置进行重新训练</strong></u>。通过重新训练的检测器，我们得到了新一代的伪标签 $B^{(k+1)}$，这些标签可以进一步细化并用于重新训练。 总的来说，我们的Track, Refine, Retrain, and Repeat框架构建了一个对象发现循环，检测器在自我训练过程中迭代地在质量逐渐提高的伪标签上进行重新训练。<br>$$<br>\tilde{B}^{(\mathcal{k})}</em>{t}&#x3D;<br>                            \begin{cases}<br>                            Renfine(\vec{S})^{(k)}<em>{t} \quad \tilde{m}^{(\mathrm{k})}</em>{t} ≥q\<br>                            \phi   \qquad\qquad\qquad;;   otherwise<br>                            \end{cases}<br>$$</p>
+<p>$$<br>\mathrm{CNN^{(k)} \leftarrow Train\bigg( \bigg{ RayDrop(p_i)\bigg}_{i\epsilon \mathcal{D}} ,\mathcal{\tilde{B}}^{(k)}  \lvert ;full!!!-!!range \bigg)}<br>$$</p>
+<p>$$<br>\mathcal{B}^{(k+1)} \leftarrow \bigg{ \mathrm{NMS\bigg( CNN^{(k)}(Voxelize(p_i))\lvert ;full-range \bigg)\bigg}_{i\epsilon \mathcal{D}}}<br>$$</p>
+<h2 id="5-Evaluation"><a href="#5-Evaluation" class="headerlink" title="5 Evaluation"></a>5 Evaluation</h2><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">作者如何评估自己的方法，实验的setup是什么样的，有没有问题或者可以借鉴的地方。<br></code></pre></td></tr></table></figure>
+
+<p>实验评估 </p>
+<p>​	在本节中，我们首先概述我们使用的数据集和指标，包括<em><strong>基于碰撞距离的新提出的检测指标</strong></em>。接下来，我们展示我们的方法优于最先进的无监督检测方法。最后，我们通过对不同组件的彻底消融研究，提供我们贡献的定量和定性见解。</p>
+<h4 id="5-1-Datasets-and-Experiment-Setting"><a href="#5-1-Datasets-and-Experiment-Setting" class="headerlink" title="5.1 Datasets and Experiment Setting:"></a>5.1 Datasets and Experiment Setting:</h4><p>我们使用 <strong>Pandaset</strong> [^68] 和 <strong>Argoverse 2 Sensor</strong> [^65]（简称为AV2）在两个不同的传感器套件上评估我们的方法。</p>
+<p>​	Pandaset 包含103个8秒钟的片段，记录在旧金山密集的城市交通以及El Camino Real高速公路上。</p>
+<p>​	在我们的实验中，我们使用旋转的Pandar64 LiDAR。它包含28种不同的注释类别，我们将其分为3个主要类别：车辆、骑自行车者和行人。</p>
+<p>在训练期间不使用任何注释；在测试时，我们对三个主要类别进行类别无关的评估，因为我们的目标是训练一个无监督的目标检测器，可以检测任何对象。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs css">我们将数据集分为<span class="hljs-number">73</span>个训练片段和<span class="hljs-number">30</span>个验证片段。两个分割均匀分布在旧金山和El Camino Real两地<br>AV2数据集是在美国六个不同城市收集的，这些城市的天气各异（从多雪到晴朗）。它包含<span class="hljs-number">850</span>个片段，每个片段长<span class="hljs-number">15</span>秒。<br>LiDAR数据来自两个<span class="hljs-number">32</span>束LiDAR，以相同的方向以<span class="hljs-number">10</span> Hz旋转，但在方向上相隔<span class="hljs-number">180</span>度。<br>我们使用官方的训练和验证分割，分别有<span class="hljs-number">700</span>和<span class="hljs-number">150</span>个片段。<br>对于我们的检测模型，我们专注于前方范围设置，感兴趣区域（ROI）的纵向范围为<span class="hljs-selector-attr">[0, 80]</span>米，横向范围为<span class="hljs-selector-attr">[-40, 40]</span>米，相对于自动车的行驶方向。<br>所选的ROI允许我们评估近距离和远距离的检测。<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="5-2-Implementation-Details"><a href="#5-2-Implementation-Details" class="headerlink" title="5.2 Implementation Details:"></a>5.2 Implementation Details:</h4><p>​	对于标签的细化，我们在Pandaset和AV2中都使用轨迹长度q &#x3D; 6。为了更新长轨迹中的边界框大小，我们对于Pandaset使用r &#x3D; 100%，对于AV2使用r &#x3D; 95%。对于Pandaset，我们进行了三轮自我训练，只在最后一轮训练中应用长轨迹细化。对于AV2，我们进行了两轮自我训练，在每一轮训练中都进行长轨迹的细化。检测模型、跟踪器和训练的更多细节已包含在附录中。</p>
+<h4 id="5-3Metrics"><a href="#5-3Metrics" class="headerlink" title="5.3Metrics:"></a>5.3Metrics:</h4><p>​	我们的度量标准关注评估一种能够检测任何对象的类别无关的目标检测器的目标。常用的IoU（交并比）在一侧对象尺寸的不准确估计方面往往过于惩罚，由于观察不完美，这一方面本质上难以预测，但我们主要关心被检测对象距自动驾驶车辆有多远的准确预测。在合并所有类别（车辆、行人和骑行者）的注释后，我们提出以下评估步骤，以全面了解不同方法的性能：</p>
+<ol>
+<li><p>测量平均精度（Average Precision，AP）和召回率。</p>
+</li>
+<li><p>一种基于标准交并比（IoU）——该标准捕捉了我们对对象尺寸的预测效果，以及一种基于距离碰撞差异（∆DTC）的新度量标准——该度量标准衡量了我们对对象距离车辆的预测效果。</p>
+<p><img   class="lazyload" data-original="C:\Users\20620\Pictures\snipaste\Snipaste_2023-11-Wednesday_19-42-25.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+</li>
+</ol>
+<h4 id="5-4-BaseLine："><a href="#5-4-BaseLine：" class="headerlink" title="5.4 BaseLine："></a>5.4 BaseLine：</h4><p>​	我们按照[71]的方法，与以下无监督基准模型进行比较。</p>
+<p>​	DBSCAN [17]<u><strong>执行基于密度的空间聚类，将具有许多附近邻居的点分组在一起。</strong></u></p>
+<p>​	DBSCAN + init-train<u><strong>使用DBSCAN标签监督学习物体检测器。</strong></u></p>
+<p>​	DBSCAN + self-train<u><strong>在初始训练后添加了两轮自我训练</strong></u>，<strong>其中物体检测器的阈值检测输出用作自我训练的伪标签。</strong></p>
+<p>​	PP score [71]<strong><u>通过测量点邻域中LiDAR点数量的方差来估计点的持久性</u>。</strong>这些PP分数然后可以用作聚类的特征，检索具有低PP分数的移动对象。请注意，在原始论文中，假设在相同区域上进行多次遍历，这对数据收集提出了非常严格的要求。为了避免对数据收集施加这一严格要求，我们仅考虑在短时间内进行的单次遍历（即片段的长度内进行多次观测）。</p>
+<p>​	PP score + init-train<u><strong>在基于持久性的聚类标签上进行一轮训练</strong></u>。</p>
+<p>​	最后，MODEST（1 traversal）<strong>在初始训练后添加了两轮自我训练</strong>，其中在每一轮中，来自最新自我训练模型的伪标签使用PP分数进行过滤，以丢弃持久聚类。</p>
+<h4 id="5-5-Benchmark-against-state-of-the-art"><a href="#5-5-Benchmark-against-state-of-the-art" class="headerlink" title="5.5 Benchmark against state-of-the-art:"></a>5.5 Benchmark against state-of-the-art:</h4><p>​	表1和表2显示了在Pandaset和Argoverse V2 Sensor数据集中与最先进的无监督方法进行比较的结果。结果表明，MODEST（1 traversal）非常依赖于在相同区域上进行多次遍历。我们的方法OYSTER在所有IoU和距离阈值上都明显优于先前的方法，无论是在平均精度还是召回率方面。</p>
+<p><img   class="lazyload" data-original="C:\Users\20620\Pictures\snipaste\Snipaste_2023-11-Wednesday_20-07-27.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><img   class="lazyload" data-original="C:\Users\20620\Pictures\snipaste\Snipaste_2023-11-Wednesday_20-08-48.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>​	图5显示了我们的方法能够克服基线的失败模式，例如静止对象的误报、长距离处高密度的误报以及一些定位和尺寸估计错误。</p>
+<p><img   class="lazyload" data-original="C:\Users\20620\Pictures\snipaste\Snipaste_2023-11-Wednesday_20-10-46.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h4 id="5-6-Effect-of-the-initial-training-range-an-dray-dropping"><a href="#5-6-Effect-of-the-initial-training-range-an-dray-dropping" class="headerlink" title="5.6 Effect of the initial training range an dray-dropping:"></a>5.6 Effect of the initial training range an dray-dropping:</h4><p>​	由于点云聚类标签在近距离具有更高的点密度，我们发现首先在近距离LiDAR图像上进行训练，使用近距离聚类标签，然后依赖ConvNets的平移不变性特性，可以实现零样本泛化到更远距离。这在表3的M1→M2中经验性地得到了证明，其中从短距离（0-40m）到全距离（0-80m）的零样本泛化（M2）效果明显优于直接在全距离上训练（M1）。</p>
+<p><img   class="lazyload" data-original="C:\Users\20620\Pictures\snipaste\Snipaste_2023-11-Wednesday_20-23-22.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>​	我们还发现，在初步训练期间采用随机射线丢失作为数据增强技术（M2→M3）有助于ConvNet更好地泛化到更远距离，以便检测更多的对象，尽管在高IoU值处评估的度量显示出它在定位准确性上略有牺牲，这可能是因为射线丢失鼓励检测器更专注于朝向自车的对象一侧而不是整体对象形状。</p>
+<h4 id="5-7-Effect-of-self-training-loop-and-long-tracklet-refinement"><a href="#5-7-Effect-of-self-training-loop-and-long-tracklet-refinement" class="headerlink" title="5.7 Effect of self-training loop and long tracklet refinement:"></a>5.7 Effect of self-training loop and long tracklet refinement:</h4><p><img   class="lazyload" data-original="C:\Users\20620\Pictures\snipaste\Snipaste_2023-11-Wednesday_20-26-57.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h2 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6 Conclusion"></a>6 Conclusion</h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs objectivec">作者给出了哪些结论，哪些是<span class="hljs-keyword">strong</span> conclusions, 哪些又是<span class="hljs-keyword">weak</span>的conclusions（即作者并不确定，只在discussion中提到，或没有给出足够的evidence）?<br></code></pre></td></tr></table></figure>
+
+<p>​	提出了一种新颖的方法，OYSTER，用于从LiDAR点云中进行无监督目标检测。通过使用弱目标先验（近距离点聚类）作为引导步骤，我们的方法可以训练一个不需要人工注释的目标检测器，首先利用CNN的平移等变性生成远距离的伪标签，然后从目标轨迹的时间一致性中导出自我监督信号。我们提出的自我训练循环对于教授无监督检测器自我改进非常有效。我们在两个真实世界的数据集，Pandaset和Argoverse 2 Sensor上验证了我们的结果，其中我们的模型在性能上显著优于先前的无监督方法。</p>
+<h2 id="7-Notes-optional"><a href="#7-Notes-optional" class="headerlink" title="7 Notes(optional)"></a>7 Notes(optional)</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">不在以上列表中，但需要特别记录的笔记。<br></code></pre></td></tr></table></figure>
+
+<h4 id="7-1-监督学习-半监督学习-弱监督学习-无监督学习-自监督学习"><a href="#7-1-监督学习-半监督学习-弱监督学习-无监督学习-自监督学习" class="headerlink" title="7.1 监督学习&#x2F;半监督学习&#x2F;弱监督学习&#x2F;无监督学习&#x2F;自监督学习"></a>7.1 监督学习&#x2F;半监督学习&#x2F;弱监督学习&#x2F;无监督学习&#x2F;自监督学习</h4><h5 id="7-1-1-监督学习（Supervised-Learning）"><a href="#7-1-1-监督学习（Supervised-Learning）" class="headerlink" title="7.1.1 监督学习（Supervised Learning）"></a>7.1.1 监督学习（Supervised Learning）</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs">定义： <br>	在监督学习中，模型从带有标签的训练数据中学习，其中每个输入样本都有一个对应的目标输出标签。模型的目标是学会从输入到输出的映射，以便对新的、未标记的数据进行预测。<br>示例： <br>	图片分类是一个监督学习的示例，其中训练数据包括图片和与之相关联的标签（例如，猫、狗、汽车等）。<br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="7-1-2-半监督学习（Semi-Supervised-Learning）"><a href="#7-1-2-半监督学习（Semi-Supervised-Learning）" class="headerlink" title="7.1.2 半监督学习（Semi-Supervised Learning）"></a>7.1.2 半监督学习（Semi-Supervised Learning）</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs">定义： <br>	在半监督学习中，模型使用同时包含标签和未标签样本的混合数据进行训练。这允许模型在部分数据上进行监督学习，同时利用未标签数据进行更全面的学习。<br>示例： <br>	在一个大型图像数据集中，只有一小部分图像可能被标记，而其他图像则没有标签。半监督学习的目标是更好地泛化到未标签的图像。<br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="7-1-3-弱监督学习（Weakly-Supervised-Learning）"><a href="#7-1-3-弱监督学习（Weakly-Supervised-Learning）" class="headerlink" title="7.1.3 弱监督学习（Weakly Supervised Learning）"></a>7.1.3 弱监督学习（Weakly Supervised Learning）</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs">定义： <br>	弱监督学习涉及使用比完全标签更弱的标签进行训练，可能是不完整、不准确或部分准确的标签。这种学习范式旨在应对标注大规模数据的成本问题。<br>示例：<br>	在弱监督目标检测中，可能只知道图像中存在物体，而不知道物体的确切位置。模型需要从这些弱标签中学习目标检测任务。<br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="7-1-4-无监督学习（Unsupervised-Learning）"><a href="#7-1-4-无监督学习（Unsupervised-Learning）" class="headerlink" title="7.1.4 无监督学习（Unsupervised Learning）"></a>7.1.4 无监督学习（Unsupervised Learning）</h5><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mathematica">定义： <br>	无监督学习涉及处理没有标签的数据。模型的目标是从数据中发现模式、结构或特征，而不是进行明确的预测。无监督学习可以用于聚类、降维、密度估计等任务。<br>示例： <br>	<span class="hljs-built_in">K</span>均值聚类是一个无监督学习的示例，它试图将数据分成不同的簇，而没有事先知道每个簇的标签。<br></code></pre></td></tr></table></figure>
+
+<h6 id="7-1-4-1-K均值聚类"><a href="#7-1-4-1-K均值聚类" class="headerlink" title="7.1.4.1 K均值聚类"></a>7.1.4.1 K均值聚类</h6><p>K均值聚类（K-Means Clustering）是一种常用的无监督学习算法，用于将数据集划分成K个不同的组（簇），其中K是用户定义的参数。这个算法的目标是将数据点划分到簇中，使得每个数据点与其所属簇的中心点（质心）的距离平方和最小。</p>
+<p>K均值聚类的步骤如下：</p>
+<ol>
+<li><p><strong>选择簇的数量 K：</strong> 用户需要事先指定希望将数据划分为多少个簇。</p>
+</li>
+<li><p><strong>初始化质心：</strong> 从数据集中随机选择 K 个数据点作为初始簇中心。</p>
+</li>
+<li><p><strong>分配数据点：</strong> 将每个数据点分配到离它最近的簇中心所属的簇。</p>
+</li>
+<li><p><strong>更新簇中心：</strong> 对于每个簇，计算其所有数据点的平均值，并将该平均值作为新的簇中心。</p>
+</li>
+<li><p><strong>重复步骤 3 和 4：</strong> 重复执行步骤 3 和 4，直到簇中心不再发生显著变化，或者达到预定的迭代次数。</p>
+</li>
+</ol>
+<p>K均值聚类的优点包括简单易实现、计算效率高。然而，它也有一些缺点，比如对初始质心的敏感性，可能会收敛到局部最小值，以及对异常值和噪声敏感。</p>
+<p>K均值聚类通常应用于数据集的聚类分析，其中我们希望将数据点划分为不同的组，以便发现数据的内在结构。它在图像压缩、图像分割、市场细分等领域都有着广泛的应用。</p>
+<h5 id="7-1-5-自监督学习（Self-Supervised-Learning）"><a href="#7-1-5-自监督学习（Self-Supervised-Learning）" class="headerlink" title="7.1.5 自监督学习（Self-Supervised Learning）"></a>7.1.5 自监督学习（Self-Supervised Learning）</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs">定义： <br>	自监督学习是一种无监督学习的方法，其中模型通过自动生成标签来学习。输入数据的某些部分被用作预测其他部分，模型的目标是最大程度地减小这些预测的误差。<br>示例： <br>	在自监督学习中，可以将图像中的某些区域遮挡，然后训练模型去预测被遮挡区域的内容，从而学习图像的表示。<br></code></pre></td></tr></table></figure>
+
+<h4 id="7-2-与无监督目标检测密切相关的三个子领域的研究"><a href="#7-2-与无监督目标检测密切相关的三个子领域的研究" class="headerlink" title="7.2 与无监督目标检测密切相关的三个子领域的研究"></a>7.2 与无监督目标检测密切相关的三个子领域的研究</h4><h5 id="7-2-1-以物体为中心的模型"><a href="#7-2-1-以物体为中心的模型" class="headerlink" title="7.2.1 以物体为中心的模型"></a>7.2.1 以物体为中心的模型</h5><p>​	通往无监督检测的一个有前途的路径，被广泛描述为视觉逆图形学：学习具有结构化解码器（或渲染器）的深度生成模型，使得编码器需要将场景分解为对象和部分，并推断它们的方向。在深度学习时代，这类模型通常被称为以物体为中心的模型。但基于此类模型的方法都只在玩具数据集上展示过其工作效果</p>
+<h5 id="7-2-2-无监督目标提议"><a href="#7-2-2-无监督目标提议" class="headerlink" title="7.2.2 无监督目标提议"></a>7.2.2 无监督目标提议</h5><p>​	许多方法直接利用各种线索发现对象，而不一定使用生成模型。</p>
+<p>。。。</p>
+<p>​	同时，[^47]利用场景流估计生成种子标签，用于训练无监督LiDAR检测器。我们的方法最初应用点聚类，但我们的核心贡献是一种基于学习的方法，可以迭代自我改进。与我们的方法相比，[^47]依赖于无监督场景流来检测对象，因此不能检测静态对象。</p>
+<p>​	此外，它仅限于点云对齐方法[3]可靠的短范围内。[^71]不需要场景流，但需要对相同位置进行重复遍历。与之同时进行的工作[64]需要无监督场景流和相机输入进行3D实例分割。<u>我们的方法既不需要场景流，也不需要相机输入或重复遍历，因此可以直接应用于任何LiDAR序列</u>。</p>
+<p>。。。</p>
+<h5 id="7-2-3-开放集检测"><a href="#7-2-3-开放集检测" class="headerlink" title="7.2.3 开放集检测"></a>7.2.3 开放集检测</h5><p>​	另一类方法处理弱监督设置，系统在某些已知对象上被给予标签，但被期望自行发现未知的内容[12]。对于2D目标检测，先前的方法包括贝叶斯方法[50]和用于不确定性估计的辍学抽样[46]。还提出了一种称为开放世界目标检测的新设置[^32]，其中视觉系统顺序接收新的标记实例，这些实例属于长尾类别[^32]。还研究了用于开放世界设置的检测变换器[^7]。对于3D LiDAR 目标检测，先前的方法包括 OSIS[66] 和 open-set 3d-net[9]；然而，它们没有研究完全无监督的情境。</p>
+<h4 id="7-3-积神经网络（CNN）的平移等变性"><a href="#7-3-积神经网络（CNN）的平移等变性" class="headerlink" title="7.3 积神经网络（CNN）的平移等变性"></a>7.3 积神经网络（CNN）的平移等变性</h4><p>​	卷积神经网络（CNN）的平移等变性指的是网络对于输入的平移具有等变性，<strong>即输入图像的平移在网络的输出中会产生相应的平移</strong>。这是由于CNN中的卷积操作，它在输入图像上通过卷积核（filter）进行滑动操作，从而检测图像中的特征。<u>由于卷积核与输入进行卷积时是共享权重的，因此对输入图像进行平移操作，相应的卷积核也会以相同的方式在输出上进行平移。</u></p>
+<p>​	&#x3D;&#x3D;这种平移等变性使得CNN对于在图像中移动的物体或特征能够保持鲁棒性&#x3D;&#x3D;。在上下文中，作者提到CNN在近距离标签上训练后可以零样本泛化到更长的距离，这可能涉及到CNN对于平移等变性的利用，使得在近距离训练的模型可以泛化到不同位置的场景。</p>
+<h4 id="7-4-点聚类"><a href="#7-4-点聚类" class="headerlink" title="7.4 点聚类"></a>7.4 点聚类</h4><p>​	点聚类是一种将数据点按照&#x3D;&#x3D;它们的相似性&#x3D;&#x3D;进行分组的技术。</p>
+<p>​	在点云处理和机器学习领域，点聚类常常用于对三维空间中的点进行分组，以便更好地理解场景、检测对象或执行其他相关任务。</p>
+<p>​	基本上，点聚类通过度量点之间的相似性（通常使用欧氏距离或其他距离度量）来将它们分组到簇中。这样的相似性通常基于点之间的空间接近性，即在三维空间中彼此靠近的点更有可能属于同一簇。点聚类算法的目标是将点云划分为具有相似特征的簇，使得同一簇内的点相似度高，而不同簇之间的点相似度较低。</p>
+<p>​	常见的点聚类算法包括 K均值聚类（K-Means Clustering）、DBSCAN（Density-Based Spatial Clustering of Applications with Noise）、层次聚类等。这些算法在处理点云数据时，可以帮助识别和分离出其中的不同物体或场景元素。</p>
+<h4 id="7-5-随机射线丢失"><a href="#7-5-随机射线丢失" class="headerlink" title="7.5 随机射线丢失"></a>7.5 随机射线丢失</h4><pre><code> &quot;随机射线丢失&quot; 是一种数据增强技术，通常在训练神经网络时用于提高模型的鲁棒性和泛化能力。在点云处理或三维数据处理的背景下，这种技术可能被用于处理 LiDAR 数据或其他传感器生成的点云。
+</code></pre>
+<p>​	具体而言，随机射线丢失涉及到在输入数据中随机删除（丢失）一些信息。在 LiDAR 数据中，这可能表示在点云中随机移除一些激光束或点，以模拟在真实场景中可能遇到的数据缺失或传感器噪声。</p>
+<p>​	这样的数据增强有助于训练模型更好地应对真实世界中的各种条件，使其更具有鲁棒性和泛化性。对于 OYSTER 方法中的随机射线丢失，它可能被用于初始引导阶段的训练，以帮助模型在近距离点云聚类中更好地处理数据。</p>
+<h4 id="7-6-时间一致性"><a href="#7-6-时间一致性" class="headerlink" title="7.6 时间一致性"></a>7.6 时间一致性</h4><p>​	时间一致性是<strong>指在不同时间点上观察到的数据或状态之间的一致性或稳定性</strong>。在这个上下文中，<u>时间一致性指的是通过跟踪物体在时间上的变化来保持物体检测或识别结果的一致性。具体来说，在物体检测任务中，通过检测器追踪同一物体在不同帧或时间点上的位置、形状等信息，以确保检测结果在时间上是连贯和一致的。</u></p>
+<p>​	在本文中，作者利用时间一致性作为一种自监督信号，通过运行无监督跟踪器来获取物体的轨迹信息。这个轨迹信息被用来进一步优化和改进检测结果，从而提高检测器在时间上的一致性。</p>
+<h4 id="7-7-贪婪算法"><a href="#7-7-贪婪算法" class="headerlink" title="7.7 贪婪算法"></a>7.7 贪婪算法</h4><p>​	贪婪算法（Greedy Algorithm）是一种在每一步选择中都采取在当前状态下最优决策的算法。它的基本思想是通过每一步的局部最优选择，期望最终能够达到全局最优。</p>
+<p>​	在文中提到的贪婪算法用于匹配检测结果和预测，具体来说，是基于边界框质心距离进行贪婪匹配。在这个上下文中，贪婪匹配意味着在当前时间步中，将每个伪标签与轨迹片段匹配，选择距离最近的轨迹片段进行匹配，而不考虑全局上的最优匹配。这种贪婪匹配策略可能导致局部最优解，但不一定能够得到全局最优解。在实际应用中，贪婪算法通常简单且高效，但需要注意可能存在的局限性。</p>
+<h2 id="8-References-optional"><a href="#8-References-optional" class="headerlink" title="8 References(optional)"></a>8 References(optional)</h2><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs maxima">列出相关性高的文献，以便之后可以继续<span class="hljs-built_in">track</span>下去。<br></code></pre></td></tr></table></figure>
+
+<p>[^①]:  在数据分析和机器学习的上下文中，”clusters”（簇）通常指的是数据集中具有相似特征或属性的数据点的组合。簇是一种将数据点分组的方式，其中组内的数据点彼此相似，而组间的数据点相对较不相似。在”Near-range: dense point cloud with clear clusters”这个文本中，”clear clusters”指的是在近距离处，点云中存在明显可辨的组群或簇，也就是具有相似特征的点被聚集在一起形成清晰的群组。这可能意味着在空间中有一些物体或场景，它们的点在点云中形成了紧密的聚集，使得它们在近距离处更容易被区分和识别。<br>[^②]: <strong>即输入图像的平移在网络的输出中会产生相应的平移</strong>。这是由于CNN中的卷积操作，它在输入图像上通过卷积核（filter）进行滑动操作，从而检测图像中的特征。<u>由于卷积核与输入进行卷积时是共享权重的，因此对输入图像进行平移操作，相应的卷积核也会以相同的方式在输出上进行平移。</u><br>[^③]: 点聚类是一种将数据点按照&#x3D;&#x3D;它们的相似性&#x3D;&#x3D;进行分组的技术。<br>[^④]: “随机射线丢失” 是一种数据增强技术，通常在训练神经网络时用于提高模型的鲁棒性和泛化能力。在点云处理或三维数据处理的背景下，这种技术可能被用于处理 LiDAR 数据或其他传感器生成的点云。<br>[^47]: Motion Inspired Unsupervised Perceptionand Prediction in Autonomous Driving. InEuropeanConferenceonComputer Vision,pages424–443.Springer,2022.<br>[^71]: Learningtodetectmobileobjectsfromlidar scanswithoutlabels.InCVPR,2022.<br>[^32]: Towardsopenworldobjectdetection.InIEEEConferenceonComputerVisionandPattern Recognition,CVPR2021,virtual,June19-25,2021,pages<br>[^7]: End-to-EndObjectDetectionwithTransformerss.InEuropeanconferenceoncomputervision,pages213–229.Springer,2020.</p>
+<p>[^38]: Pointpillars:Fastencoders forobjectdetectionfrompointclouds.InProceedingsof theIEEE&#x2F;CVFconferenceoncomputervisionandpattern recognition,pages12697–12705,2019.<br>[^70]: Pixor:Realtime3dobjectdetectionfrompointclouds.InProceedingsof theIEEEconferenceonComputerVisionandPatternRecognition,pages7652–7660,2018.<br>[^68]: Pandaset: Advanced sensor suite dataset for autonomous driving.<br>[^65]: Argoverse 2: Next generation datasets for self-driving perception and forecasting.</p>
+
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>大宋崔氏</li>
+    <li><strong>本文链接：</strong><a href="http://example.com/2023/12/06/OYSTER%EF%BC%9A%E5%9F%BA%E4%BA%8ELiDAR%E7%82%B9%E4%BA%91%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E6%96%B9%E5%90%91/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2023&#x2F;12&#x2F;06&#x2F;OYSTER%EF%BC%9A%E5%9F%BA%E4%BA%8ELiDAR%E7%82%B9%E4%BA%91%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E6%96%B9%E5%90%91&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2023&#x2F;12&#x2F;06&#x2F;OYSTER%EF%BC%9A%E5%9F%BA%E4%BA%8ELiDAR%E7%82%B9%E4%BA%91%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E6%96%B9%E5%90%91&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+          <section class="donate">
+  <div id="qrcode-donate">
+    <img   class="lazyload" data-original="https://pic.izhaoo.com/alipay.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" >
+  </div>
+  <div class="icon">
+    <a href="javascript:;" id="alipay"><i class="iconfont iconalipay"></i></a>
+    <a href="javascript:;" id="wechat"><i class="iconfont iconwechat-fill"></i></a>
+  </div>
+</section>
+        
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D%E7%82%B9%E4%BA%91/" rel="tag">3D点云</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" rel="tag">目标检测</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a></a>
+    <a href="/2023/12/06/%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/">常用指令<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Title%EF%BC%9ATowards-Unsupervised-Object-Detection-from-LiDAR-Point-Clouds"><span class="toc-text">Title：Towards Unsupervised Object Detection from LiDAR Point Clouds</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Summary"><span class="toc-text">1 Summary</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Research-Objective-s"><span class="toc-text">2 Research Objective(s)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Problem-Statement"><span class="toc-text">3 Problem Statement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Method-s"><span class="toc-text">4 Method(s)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Evaluation"><span class="toc-text">5 Evaluation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Conclusion"><span class="toc-text">6 Conclusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Notes-optional"><span class="toc-text">7 Notes(optional)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-References-optional"><span class="toc-text">8 References(optional)</span></a></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="tencent://message/?Menu=yes&uin=894519210 "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#12B7F5'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconQQ "></i>
+      </a><a 
+        href="javascript:; "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#09BB07'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconwechat-fill "></i>
+      </a><a 
+        href="https://www.instagram.com/izhaoo/ "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#DA2E76'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconinstagram "></i>
+      </a><a 
+        href="https://github.com/zhaoo "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:izhaoo@163.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
